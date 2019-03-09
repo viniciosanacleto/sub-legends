@@ -1,3 +1,6 @@
+# Sublegends # 
+Download subtitles in your terminal
+
 # How to install # 
 
 ```shell
