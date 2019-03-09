@@ -9,7 +9,7 @@
   "bin": {
     "sublegends": "index.js"
   },
-  "keywords": [],
+  "keywords": ["subtitles","legends","movies","series"],
   "author": "",
   "license": "ISC",
   "dependencies": {
