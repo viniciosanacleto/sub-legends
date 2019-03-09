@@ -1,10 +1,13 @@
 {
-  "name": "sub-legends",
+  "name": "sublegends",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": {
+    "sublegends": "index.js"
   },
   "keywords": [],
   "author": "",

@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const File = require('./file')
 const Commander = require('commander')
 const Path = require('path')
