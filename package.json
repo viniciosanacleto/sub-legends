@@ -1,6 +1,6 @@
 {
   "name": "sublegends",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,12 @@
   "bin": {
     "sublegends": "index.js"
   },
-  "keywords": ["subtitles","legends","movies","series"],
+  "keywords": [
+    "subtitles",
+    "legends",
+    "movies",
+    "series"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
