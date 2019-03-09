@@ -8,7 +8,7 @@ npm install -g sublegends
 #### Download all subtitles in a folder ####
 Open the movie/serie folder
 ```shell
-cd <movie/series-folder>
+cd <path-to-folder>
 ```
 Use the Sublegends command on the folder
 ```shell
@@ -26,6 +26,20 @@ You also can use the Sublegends command direct on file
 sublegends /folder-path/my-file.mp4
 ```
 Your file can be of any extension: `.mp4`,`.avi`,`.mkv`,`.anything`, etc.
+
+#### Change the subtitle language ####
+By default all the subtitles are downloaded in english. However if you want to download in other language you can use the `-l` or `--lang` option e.g:
+```shell
+sublegends . -l fr
+```
+If you want to know what languages are available for a specific file
+```shell
+sublegends <path-to-file> -s
+```
+or for the entire folder
+```shell
+sublegends <path-to-folder> -s
+```
 
 # Technology used #
 * [NodeJS](https://nodejs.org/en/)
