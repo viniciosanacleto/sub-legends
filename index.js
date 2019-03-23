@@ -5,12 +5,13 @@ const Color = require('./color-console')
 const Commander = require('commander')
 const Path = require('path')
 const SubDBService = require('./services/subdb')
+const PackageJson = require('./package.json')
 
 main()
 
 async function main() {
     Commander
-        .version('1.1.0')
+        .version(PackageJson.version)
         .arguments('<path>')
         .action(function (path) {
             dirValue = Path.dirname(path)
