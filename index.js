@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const File = require('./file')
+const Color = require('./color-console')
 const Commander = require('commander')
 const Path = require('path')
 const SubDBService = require('./services/subdb')
@@ -8,9 +9,8 @@ const SubDBService = require('./services/subdb')
 main()
 
 async function main() {
-
     Commander
-        .version('1.0.0')
+        .version('1.1.0')
         .arguments('<path>')
         .action(function (path) {
             dirValue = Path.dirname(path)
@@ -25,9 +25,9 @@ async function main() {
     try {
         // Execute program if has an argument
         if (process.argv.length > 2) {
-            console.log(`Path: ${dirValue}`);
-            console.log(`File: ${fileValue}`)
-            console.log(`Sub. Lang: ${Commander.lang ? Commander.lang : 'default (en)'} \n`)
+            // console.log(`Path: ${Color.blue(dirValue)}`);
+            console.log(`File/Folder: ${Color.blue(fileValue)}`)
+            console.log(`Sub. Lang: ${Color.blue(Commander.lang ? Commander.lang : 'default (en)')} \n`)
 
             if (Commander.hash) {
                 getHash(pathValue)
@@ -41,25 +41,27 @@ async function main() {
             }
         }
         // Show help if don't have an argument
-        else{
+        else {
             Commander.help()
         }
     }
     catch (e) {
-        console.log('An error has occurred, make sure that you are using the command correctly:')
+        console.log(Color.red('An error has occurred, make sure that you are using the command correctly:'))
         console.log('sublegends '+Commander.usage())
     }
 }
 
 function getHash(path) {
+    console.log('Getting hashes... \n')
     if (File.isDirectory(path)) {
         let listFiles = File.getFileList(path)
+        listFiles = File.validateFileExtensions(listFiles)
         for (let file of listFiles) {
-            console.log(`Hash [${file}]: ${File.calculateHash(path + '/' + file)}`)
+            console.log(`${file}: ${Color.green(File.calculateHash(path + '/' + file))}`)
         }
     }
     else {
-        console.log(`Hash: ${File.calculateHash(path)}`)
+        console.log(`${Color.green(File.calculateHash(path))}`)
     }
 }
 
@@ -68,44 +70,58 @@ async function search(path) {
 
     if (File.isDirectory(path)) {
         let listFiles = File.getFileList(path)
+        listFiles = File.validateFileExtensions(listFiles)
         for (let file of listFiles) {
             let hash = File.calculateHash(path + '/' + file)
             let res = await SubDBService.search(hash)
-            console.log(`[${file}]: ${res.toUpperCase()}`)
+            console.log(`${file}: ${Color.green(res.toUpperCase())}`)
         }
     }
     else {
-        let hash = File.calculateHash(path)
-        let res = await SubDBService.search(hash)
-        console.log(res.toUpperCase())
+        // Only search if file extension is valid
+        if (File.validateFileExtensions(path)) {
+            let hash = File.calculateHash(path)
+            let res = await SubDBService.search(hash)
+            console.log(Color.green(res.toUpperCase()))
+        }
+        else{
+            console.log("This file hasn't a valid extension")
+        }
     }
 }
 
 async function download(path, lang) {
-    console.log('Downloading Subtitles')
+    console.log('Downloading Subtitles... \n')
     if (File.isDirectory(path)) {
         let listFiles = File.getFileList(path)
+        listFiles = File.validateFileExtensions(listFiles)
         for (let file of listFiles) {
             let hash = File.calculateHash(path + '/' + file)
             let res = await SubDBService.download(hash, lang)
             if (res && res != '') {
                 File.writeSub(path + '/' + file, res)
-                console.log(`[${file}]: OK`)
+                console.log(`${file}: ${Color.green('OK')}`)
             }
             else {
-                console.log(`[${file}]: SUBTITLE NOT FOUND!`)
+                console.log(`${file}: ${Color.red('SUBTITLE NOT FOUND!')}`)
             }
         }
     }
     else {
-        let hash = File.calculateHash(path)
-        let res = await SubDBService.search(hash)
-        if (res && res != '') {
-            File.writeSub(path, res)
-            console.log(`[${Path.basename(path)}]: OK`)
+        //Only download if file extension is valid
+        if (File.validateFileExtensions(path)) {
+            let hash = File.calculateHash(path)
+            let res = await SubDBService.search(hash)
+            if (res && res != '') {
+                File.writeSub(path, res)
+                console.log(`${Path.basename(path)}: ${Color.green('OK')}`)
+            }
+            else {
+                console.log(`${Path.basename(path)}: ${Color.red('SUBTITLE NOT FOUND!')}`)
+            }
         }
-        else {
-            console.log(`[${Path.basename(path)}]: SUBTITLE NOT FOUND!`)
+        else{
+            console.log("This file hasn't a valid extension")
         }
     }
 }

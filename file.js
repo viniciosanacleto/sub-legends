@@ -67,6 +67,42 @@ class File {
             throw new Error(e)
         }
     }
+
+    /**
+     * Get the list of valid file extensions
+     */
+    _getValidFileExtensions() {
+        return JSON.parse(fs.readFileSync('./misc/extensions.json'))
+    }
+
+    /**
+     * Validate extensions of a file list
+     * @param {Array | String} files 
+     * @returns {Array | String | null} validList
+     */
+    validateFileExtensions(files) {
+        let extensions = this._getValidFileExtensions()
+        if (typeof (files) == 'object') {
+            let validList = []
+            for (let file of files) {
+                let ext = Path.extname(file).substr(1)
+                if (extensions.includes(ext)) {
+                    validList.push(file)
+                }
+            }
+            return validList
+        }
+        else if(typeof (files) == 'string'){
+            let ext = Path.extname(files).substr(1)
+            if (extensions.includes(ext)) {
+                return files
+            }
+            return null
+        }
+        else{
+            return null
+        }
+    }
 }
 
 module.exports = new File
