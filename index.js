@@ -8,6 +8,7 @@ const SubDBService = require('./services/subdb')
 main()
 
 async function main() {
+
     Commander
         .version('1.0.0')
         .arguments('<path>')
@@ -17,30 +18,36 @@ async function main() {
             pathValue = dirValue + '/' + fileValue
         })
         .option('-l, --lang [value]', 'Language to search e.g.: en')
-        .option('-h --hash', 'Get the 64kb hash for the file')
+        .option('-H --hash', 'Get the 64kb hash for the file')
         .option('-s --search', 'Search for languages that subtitle is available')
         .parse(process.argv)
 
     try {
-        console.log(`Path: ${dirValue}`);
-        console.log(`File: ${fileValue}`)
-        console.log(`Sub. Lang: ${Commander.lang ? Commander.lang : 'default (en)'} \n`)
-        // console.log(`Is a directory: ${File.isDirectory(pathValue)}`)
-        // console.log(File.getFileList(pathValue))
+        // Execute program if has an argument
+        if (process.argv.length > 2) {
+            console.log(`Path: ${dirValue}`);
+            console.log(`File: ${fileValue}`)
+            console.log(`Sub. Lang: ${Commander.lang ? Commander.lang : 'default (en)'} \n`)
 
-        if (Commander.hash) {
-            getHash(pathValue)
+            if (Commander.hash) {
+                getHash(pathValue)
+            }
+            else if (Commander.search) {
+                await search(pathValue)
+            }
+            else {
+                let lang = Commander.lang ? Commander.lang : 'en'
+                await download(pathValue, lang)
+            }
         }
-        else if (Commander.search) {
-            await search(pathValue)
-        }
-        else {
-            let lang = Commander.lang ? Commander.lang : 'en'
-            await download(pathValue, lang)
+        // Show help if don't have an argument
+        else{
+            Commander.help()
         }
     }
     catch (e) {
-        console.error('ERROR:', e)
+        console.log('An error has occurred, make sure that you are using the command correctly:')
+        console.log('sublegends '+Commander.usage())
     }
 }
 
@@ -85,7 +92,7 @@ async function download(path, lang) {
                 File.writeSub(path + '/' + file, res)
                 console.log(`[${file}]: OK`)
             }
-            else{
+            else {
                 console.log(`[${file}]: SUBTITLE NOT FOUND!`)
             }
         }
@@ -97,7 +104,7 @@ async function download(path, lang) {
             File.writeSub(path, res)
             console.log(`[${Path.basename(path)}]: OK`)
         }
-        else{
+        else {
             console.log(`[${Path.basename(path)}]: SUBTITLE NOT FOUND!`)
         }
     }
