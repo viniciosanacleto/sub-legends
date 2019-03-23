@@ -1,6 +1,7 @@
 const fs = require('fs')
 const crypto = require('crypto')
 const Path = require('path')
+const validFileExtensions = require('./misc/extensions.json')
 class File {
     /**
      * Calculate MD5 hash of file using first and last 64kb data of file
@@ -69,24 +70,16 @@ class File {
     }
 
     /**
-     * Get the list of valid file extensions
-     */
-    _getValidFileExtensions() {
-        return JSON.parse(fs.readFileSync('./misc/extensions.json'))
-    }
-
-    /**
      * Validate extensions of a file list
      * @param {Array | String} files 
      * @returns {Array | String | null} validList
      */
     validateFileExtensions(files) {
-        let extensions = this._getValidFileExtensions()
         if (typeof (files) == 'object') {
             let validList = []
             for (let file of files) {
                 let ext = Path.extname(file).substr(1)
-                if (extensions.includes(ext)) {
+                if (validFileExtensions.includes(ext)) {
                     validList.push(file)
                 }
             }
@@ -94,7 +87,7 @@ class File {
         }
         else if(typeof (files) == 'string'){
             let ext = Path.extname(files).substr(1)
-            if (extensions.includes(ext)) {
+            if (validFileExtensions.includes(ext)) {
                 return files
             }
             return null
