@@ -1,6 +1,17 @@
 # Sublegends # 
 Download subtitles in your terminal
 
+#Last updates
+v1.1.1
+* Code refactoring
+
+v1.1.0
+* File extension validation
+* Error catching bugs
+* Help as default command if no path has been passed
+* Console outputs colored
+  
+
 # How to install # 
 
 ```shell
