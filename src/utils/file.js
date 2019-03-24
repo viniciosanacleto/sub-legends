@@ -1,7 +1,11 @@
 const fs = require('fs')
 const crypto = require('crypto')
 const Path = require('path')
-const validFileExtensions = require('./misc/extensions.json')
+const validFileExtensions = require('../misc/extensions.json')
+
+/**
+ * Manipulate files
+ */
 class File {
     /**
      * Calculate MD5 hash of file using first and last 64kb data of file

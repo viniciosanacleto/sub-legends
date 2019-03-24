@@ -1,14 +1,20 @@
 #!/usr/bin/env node
 
-const File = require('./file')
-const Color = require('./color-console')
+const File = require('./src/utils/file')
+const Color = require('./src/utils/color-console')
 const Commander = require('commander')
 const Path = require('path')
-const SubDBService = require('./services/subdb')
+const SubDBService = require('./src/services/subdb')
 const PackageJson = require('./package.json')
 
+/**
+ * Call entrypoint
+ */
 main()
 
+/**
+ * Application entrypoint
+ */
 async function main() {
     Commander
         .version(PackageJson.version)
@@ -24,7 +30,7 @@ async function main() {
         .parse(process.argv)
 
     try {
-        // Execute program if has an argument
+        // Execute program if has at least one argument
         if (process.argv.length > 2) {
             // console.log(`Path: ${Color.blue(dirValue)}`);
             console.log(`File/Folder: ${Color.blue(fileValue)}`)
@@ -52,6 +58,10 @@ async function main() {
     }
 }
 
+/**
+ * Get hash 64kb hash from a file or a list of files
+ * @param {string} path 
+ */
 function getHash(path) {
     console.log('Getting hashes... \n')
     if (File.isDirectory(path)) {
@@ -66,6 +76,10 @@ function getHash(path) {
     }
 }
 
+/**
+ * Get languages available for a file or list of files
+ * @param {string} path 
+ */
 async function search(path) {
     console.log('Subtitles available:')
 
@@ -91,6 +105,11 @@ async function search(path) {
     }
 }
 
+/**
+ * Download subtitles for a file or a list of files
+ * @param {string} path 
+ * @param {string} lang 
+ */
 async function download(path, lang) {
     console.log('Downloading Subtitles... \n')
     if (File.isDirectory(path)) {
