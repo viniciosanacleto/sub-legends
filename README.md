@@ -1,7 +1,7 @@
 # Sublegends # 
 Download subtitles in your terminal
 
-#Last updates
+# Last updates #
 v1.1.1
 * Code refactoring
 
